@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>Hello Page</title>
+      <link type="text/css" rel="stylesheet" href="/static/style_sheet.css"/>
+      <script type="text/javascript" src="{{ url_for('static', filename='scriptin.js') }}"></script>
+  </head>
+<body class="body">
+     <!-- Login pannel on left side of page -->
+     <button class="button_1" style="vertical-align:middle" onclick="openNav_1()"><span>Login</span></button>
+     <div id="mySidenav_1" class="sidenav_1">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav_1()">&times;</a>
+          <a>
+               <div>
+                    <form action="/action_page.php" display="inline-block" text-align="center">
+                      <div>
+                        <label><b>Username</b></label>
+                        <input type="text" placeholder="Enter Username" name="uname" required>
+
+                        <label><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" name="psw" required>
+
+                        <button type="submit">Login</button>
+                        <input type="checkbox" checked="checked" color="white"> Remember me
+                      </div>
+
+                      <div style="background-color:#f1f1f1">
+                      </div>
+                    </form>
+               </div>
+          </a>
+     </div>
+     
+     <!-- About pannel on right side of page  -->
+     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+     <div id="mySidenav" class="sidenav">
+       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+       <a href="#">About</a>
+       <a href="#">Order</a>
+       <a href="#">Contact</a>
+     </div>
+
+     <!-- Sign up info on the center of the page  -->
+
+
+
+     <div id="center_tab">
+          <form action="/action_page.php">
+          <table>
+               <form action="/action_page.php">
+               <tr>
+                    <td colspan="2">
+                         <img src="/static/team_mega_logo.jpg" class="img-thumbnail" alt="Team_Mega" width="200" height="200">
+                    </td>
+               </tr>
+               <tr>
+                    <td colspan="2">
+                         <h1>Sign up for exclusive updates!</h1>
+                    </td>
+               </tr>
+               <tr>
+                    <td>
+                         <input type="text" placeholder="First Name" name="fname" required>
+                    </td>
+                    <td>
+                         <input type="text" placeholder="Last Name" name="lname" required>
+                    </td>
+               </tr>
+               <tr>
+                    <td>
+                         <input type="text" placeholder="Email" name="email" required>
+                    </td>
+                    <td>
+                         <input type="text" placeholder="Password" name="pass" required>
+                    </td>
+               </tr>
+
+               <tr>
+                    <td colspan="2">
+                         <input type="text" placeholder="How did you hear about us?" name="uname" required>
+                    </td>
+               </tr>
+               <tr>
+                    <td colspan="2">
+                         <button type="submit">Submit</button>
+                    </td>
+               </tr>
+               </form>
+          </table>
+          </form>
+     </div>
+</body>
+</html>
