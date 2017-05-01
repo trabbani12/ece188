@@ -37,7 +37,7 @@ def login_usr(usrname):
         if data['username'] == usrname:
             return render_template("login.html", username=usrname)
         else:
-            return render_template('home.html')
+            return redirect(url_for('/'))
     else:
         return render_template("home.html")
 
