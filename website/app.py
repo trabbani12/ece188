@@ -10,14 +10,7 @@ db = client.tmega
 #temp = db.user_info.find_one() #it's a dictionary
 @app.route('/')
 def index():
-
-    #db.user_info.insert_one({'username':'Admin', 'password':'password', 'email':'admin@test.edu', 'newsletters':'y'}) ---this would be syntax for adding info to DB
     return render_template('home.html')
-
-
-# @app.route('/sign-up/sucessful/')
-# def sign_up():
-#     return render_template('sign_up.html', username="Admin")
 
 @app.route('/sign_up/successful/', methods = ['POST', 'GET'])
 def sign_up():
@@ -26,7 +19,8 @@ def sign_up():
     email = request.form['email']
     password = request.form['pass']
     referl = request.form['referl']
-
+    uname = fname[0] + lname
+    db.user_info.insert_one({'first_name':fname,'last_name': lname, 'email':email, 'password': password , 'referl':referl, "username":uname})
     return render_template('sign_up.html', username=fname)
 
 @app.route('/login/successful/',  methods = ['POST', 'GET'])
@@ -37,13 +31,23 @@ def login():
 
 @app.route('/login/<usrname>/')
 def login_usr(usrname):
+    cursor = collection.find({})
+    count = cursor.count()
+    print count
     return render_template("login.html", username=usrname)
-
-# @app.route('/sign-up-sucessful')
-# def sign_up():
-#     form = cgi.FieldStorage()
-#     searchterm =  form.getvalue('searchbox')
-#     return render_template('sign_up.html', username="Testing")
 
 if __name__=="__main__":
     app.run()
+
+
+
+
+
+
+#Notes:
+
+# for data in db.user_info.find(): #iterate through entire database
+#     print data
+#     print "\n"
+# result = db.user_info.delete_many({}) #delete entire database
+# print result
