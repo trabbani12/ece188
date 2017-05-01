@@ -12,7 +12,7 @@
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav_1()">&times;</a>
           <a>
                <div>
-                    <form action="/action_page.php" display="inline-block" text-align="center">
+                    <form name="search" action="/login/successful/" method="POST" display="inline-block" text-align="center">
                       <div>
                         <label><b>Username</b></label>
                         <input type="text" placeholder="Enter Username" name="uname" required>
@@ -20,7 +20,7 @@
                         <label><b>Password</b></label>
                         <input type="password" placeholder="Enter Password" name="psw" required>
 
-                        <button type="submit">Login</button>
+                        <input type="submit" name="submit" value="Login"></input>
                         <input type="checkbox" checked="checked" color="white"> Remember me
                       </div>
 
@@ -44,7 +44,8 @@
 
      <div id="center_tab">
           <table>
-               <form name="search" action="/website/app.py" method="get">
+               <!-- <form name="search" action="/website/app.py" method="get"> -->
+               <form name="search" action="/sign_up/successful/" method="POST">
                     <tr>
 
                          <td colspan="2">
@@ -80,7 +81,7 @@
                     </tr>
                     <tr>
                          <td colspan="2">
-                              <button type="submit" name="submit" value="sign up"><a href="/sign-up/sucessful/">Submit</a></button>
+                              <input type="submit" name="submit" value="Sign Me Up!"></input>
                          </td>
                     </tr>
                </form>
