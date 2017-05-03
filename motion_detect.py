@@ -173,6 +173,31 @@ while True:
 	print "Vector Angles List: "
 	print np.around(vector_angles)
 
+
+	#replace negative angles to form unit circle values from 0 to 360 degrees
+	for k in range(0,vector_array_length-1):
+	    if vector_angles[k] <= 0:
+		vector_angles[k] = 360 + vector_angles[k]
+
+        print "Vector Angles List: "
+        print np.around(vector_angles)
+
+	#bin vector angles for frequency analysis
+	edges = np.linspace(0,360, 73)  #0 5 10 ...360
+	frequency_hist = np.histogram(vector_angles,edges)
+
+	print "Freqency Binss: "
+	print frequency_hist[0]
+	
+	frequency_hist = np.array(frequency_hist[0])
+
+	dominant_angle_number = len(frequency_hist[np.where(frequency_hist > 4)])
+	dominant_angle_index = np.argmax(frequency_hist)
+	dominant_angle_value = 5*dominant_angle_index
+
+	print "Dominant Angle: "
+	print dominant_angle_value	
+
 	shape_id(rounded_heading)
 	# Reset heading list
 	heading = []
