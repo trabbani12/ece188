@@ -198,6 +198,13 @@ while True:
 	print "Dominant Angle: "
 	print dominant_angle_value	
 
+	#Use frequency analysis to determine shape drawn
+	choices = {1: 'line', 3: 'triangle', 4: 'square', 0: 'circle' }
+	result = choices.get(dominant_angle_number, 'Sorry no ID made! Try again...')
+
+	print "Shape Matched: "
+	print result
+
 	shape_id(rounded_heading)
 	# Reset heading list
 	heading = []
