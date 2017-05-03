@@ -1,3 +1,4 @@
+
 import logging
 import sys
 import time
@@ -137,7 +138,7 @@ while True:
 	print data_points
 
 	#generate vectors from data_points
-	vectors = np.zeros((position_array_length,2))
+	vectors = np.zeros((position_array_length,3))
 
 	#create vectors connecting each points
 	for k in range(0,position_array_length-2):
@@ -152,8 +153,25 @@ while True:
 	print vectors
 	
 	vectors = vectors[~(vectors==0).all(1)]
+
+
 	print "Vectors with duplicates removed: "
 	print vectors
+
+	ref_vector = [1,0,0]
+	cross_variable = np.cross(ref_vector,vectors)
+	vector_array_length = len(vectors)
+
+	#vector_angles = np.zeros((vector_array_length,1))
+	vector_angles = []	
+
+	for k in range(0,vector_array_length-1): 
+	    dot_product = np.dot(ref_vector,vectors[k])
+	    np.arctan2(cross_variable[:,2],np.dot(ref_vector,vectors[k]))
+            vector_angles.append( np.arctan2(cross_variable[k,2],np.dot(ref_vector,vectors[k]))*180/pi)
+
+	print "Vector Angles List: "
+	print np.around(vector_angles)
 
 	shape_id(rounded_heading)
 	# Reset heading list
