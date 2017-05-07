@@ -42,7 +42,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #variable for controlling debug print statemnts
-debug = 0
+debug=0
 #debug=1
 
 # Lists for storing readings between button pushes
