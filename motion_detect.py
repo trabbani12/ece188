@@ -41,6 +41,9 @@ print('Reading BNO055 data, press Ctrl-C to quit...')
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+#Debug Control Variable
+debug = 0
+
 # Lists for storing readings between button pushes
 heading = []
 roll = []
@@ -110,18 +113,23 @@ while True:
 
 	# Convert heading data to project position data
 	position_array_length = len(centered_heading[:])
+	
 	print "Array Length: "
 	print position_array_length
 
 	pitch_array_length = len(rounded_pitch[:])
-	print "pitch array length: "
-	print pitch_array_length 
+	
+	if debug==1:
+ 	    print "pitch array length: "
+	    print pitch_array_length 
 
 	heading_array_length = len(rounded_heading[:])
-	print "heading array length: "
-	print heading_array_length
+	
+	if debug==1:
+	    print "heading array length: "
+            print heading_array_length
 
-	#data_points = angle2xy(10, centered_heading[:], rounded_pitch[:])
+	
 	y_length = 10
 	x_position = y_length * np.tan(np.deg2rad(centered_heading[:]))
 	y_position = y_length * np.tan(np.deg2rad(rounded_pitch[:]))
@@ -170,6 +178,7 @@ while True:
 	    np.arctan2(cross_variable[:,2],np.dot(ref_vector,vectors[k]))
             vector_angles.append( np.arctan2(cross_variable[k,2],np.dot(ref_vector,vectors[k]))*180/pi)
 
+	
 	print "Vector Angles List: "
 	print np.around(vector_angles)
 
@@ -186,8 +195,9 @@ while True:
 	edges = np.linspace(0,360, 73)  #0 5 10 ...360
 	frequency_hist = np.histogram(vector_angles,edges)
 
-	print "Freqency Binss: "
-	print frequency_hist[0]
+	if debug==1:
+	    print "Freqency Bins: "
+	    print frequency_hist[0]
 	
 	frequency_hist = np.array(frequency_hist[0])
 
