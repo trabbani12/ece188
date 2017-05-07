@@ -41,6 +41,10 @@ print('Reading BNO055 data, press Ctrl-C to quit...')
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+#variable for controlling debug print statemnts
+debug = 0
+#debug=1
+
 # Lists for storing readings between button pushes
 heading = []
 roll = []
@@ -62,20 +66,12 @@ def angle2xy(y_length, heading, pitch):
     data_points = np.vstack((x_position,y_position))
     return data_points
 
-def shape_id(heading):
-    rounded_heading = []
-    print "rounded heading list: "
-    print heading
-    return
-#main loop 
-
-
 #main loop 
 
 while True:
     input_state = GPIO.input(24)
     if input_state == False:
-	print('Button Pressed')	  
+	# print('Button Pressed')	  
 	# Read the Euler angles for heading, roll, pitch (all in degrees).
 	heading_temp, pitch_temp, roll_temp = bno.read_euler()
 	# store orientation angles into list arrays
@@ -88,7 +84,9 @@ while True:
 
     elif len(heading) != 0:
 	# Print everything out.
-	print "heading list: "
+
+	if debug==1:
+	    print "heading list: "
 
 
 	rounded_heading = []
@@ -102,40 +100,50 @@ while True:
 
 	# Center heading
 	centered_heading = rounded_heading[:]-rounded_heading[1]
-	print "Centered heading data: "
-	print centered_heading
-
-	print "Pitch data: "
-	print rounded_pitch
+	
+	if debug==1:
+	    print "Centered heading data: "
+	    print centered_heading
+	    print "Pitch data: "
+	    print rounded_pitch
 
 	# Convert heading data to project position data
 	position_array_length = len(centered_heading[:])
-	print "Array Length: "
-	print position_array_length
+
+	if debug==1:
+	    print "Array Length: "
+	    print position_array_length
 
 	pitch_array_length = len(rounded_pitch[:])
-	print "pitch array length: "
-	print pitch_array_length 
+
+	if debug==1:
+	    print "pitch array length: "
+	    print pitch_array_length 
 
 	heading_array_length = len(rounded_heading[:])
-	print "heading array length: "
-	print heading_array_length
 
-	#data_points = angle2xy(10, centered_heading[:], rounded_pitch[:])
+	if debug==1:
+ 	    print "heading array length: "
+	    print heading_array_length
+
+	#Convert heading and pitch angles into cartesion coordinates
+        #y_length was arbitrarily set to 10
 	y_length = 10
 	x_position = y_length * np.tan(np.deg2rad(centered_heading[:]))
 	y_position = y_length * np.tan(np.deg2rad(rounded_pitch[:]))
 
-	print "x_position array: "
-	print x_position
+	if debug==1:
+	    print "x_position array: "
+	    print x_position
 
-	print "y_position array: "
-	print y_position
+	    print "y_position array: "
+	    print y_position
 
 	data_points = np.vstack((x_position,y_position))
-	
-	print "data points: "
-	print data_points
+
+	if debug==1:	
+	    print "data points: "
+	    print data_points
 
 	#generate vectors from data_points
 	vectors = np.zeros((position_array_length,3))
@@ -145,24 +153,27 @@ while True:
 	    vectors[k,0] = data_points[0,k+1] - data_points[0,k];
             vectors[k,1] = data_points[1,k+1] - data_points[1,k];
 
-	#creates final vector between starting and ending points  **MAY NEED TO BE REMOVED***
+	#creates final vector between starting and ending points
 	vectors[position_array_length-1,0] =  data_points[0,position_array_length-1] - data_points[0,0];
     	vectors[position_array_length-1,1] =  data_points[1,position_array_length-1] - data_points[1,0];
 
-	print "Vectors Array: "
-	print vectors
-	
+	if debug==1: 
+	    print "Vectors Array: "
+	    print vectors
+
+	#remove duplicate vectors from array
 	vectors = vectors[~(vectors==0).all(1)]
 
+	if debug==1:
+	    print "Vectors with duplicates removed: "
+	    print vectors
 
-	print "Vectors with duplicates removed: "
-	print vectors
-
+	#generate array of vector angles by reference vector array to a zero degree reference vector
 	ref_vector = [1,0,0]
 	cross_variable = np.cross(ref_vector,vectors)
 	vector_array_length = len(vectors)
 
-	#vector_angles = np.zeros((vector_array_length,1))
+	
 	vector_angles = []	
 
 	for k in range(0,vector_array_length-1): 
@@ -170,8 +181,9 @@ while True:
 	    np.arctan2(cross_variable[:,2],np.dot(ref_vector,vectors[k]))
             vector_angles.append( np.arctan2(cross_variable[k,2],np.dot(ref_vector,vectors[k]))*180/pi)
 
-	print "Vector Angles List: "
-	print np.around(vector_angles)
+	if debug==1:
+	    print "Vector Angles List: "
+	    print np.around(vector_angles)
 
 
 	#replace negative angles to form unit circle values from 0 to 360 degrees
@@ -179,18 +191,21 @@ while True:
 	    if vector_angles[k] <= 0:
 		vector_angles[k] = 360 + vector_angles[k]
 
-        print "Vector Angles List: "
-        print np.around(vector_angles)
+	if debug==1:
+            print "Vector Angles List: "
+            print np.around(vector_angles)
 
 	#bin vector angles for frequency analysis
 	edges = np.linspace(0,360, 73)  #0 5 10 ...360
 	frequency_hist = np.histogram(vector_angles,edges)
 
-	print "Freqency Binss: "
-	print frequency_hist[0]
+	if debug==1:
+	    print "Freqency Bins: "
+	    print frequency_hist[0]
 	
 	frequency_hist = np.array(frequency_hist[0])
 
+	#generate shape charactersistics that can be used to identify drawn shape
 	dominant_angle_number = len(frequency_hist[np.where(frequency_hist > 4)])
 	dominant_angle_index = np.argmax(frequency_hist)
 	dominant_angle_value = 5*dominant_angle_index
@@ -205,7 +220,6 @@ while True:
 	print "Shape Matched: "
 	print result
 
-	shape_id(rounded_heading)
 	# Reset heading list
 	heading = []
 	pitch = []
