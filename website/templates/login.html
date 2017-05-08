@@ -2,19 +2,20 @@
   <html>
     <head>
       <title>Hello Page</title>
-      <link type="text/css" rel="stylesheet" href="/static/style_sheet.css"/>
+      <link type="text/css" rel="stylesheet" href="/static/login_style_sheet.css"/>
   </head>
 <body class="body">
      <div id="center_tab">
-          <table>
+          <table id="tabl">
                <tr>
-                    <td colspan="2">
-                         <h1>Welcome, {{ username }}! You have been logged in.</h1>
+                    <td colspan="6" background-color="white">
+                         <h1 class="htitle" color="white"> {{username}}'s Database</h1>
                     </td>
                </tr>
+
                <tr>
-                    <td colspan="2">
-                         <a href="/">Return to home page</a>
+                    <td background-color="white">
+                         <left>{{ datab }}</left>
                     </td>
                </tr>
           </table>

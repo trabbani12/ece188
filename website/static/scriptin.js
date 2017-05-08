@@ -21,9 +21,11 @@ function closeNav() {
 
 function setCookie(cname,cvalue,exdays) {
     var d = new Date();
+    var fs = require('fs');
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires=" + d.toGMTString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    fs.appendFileSync('cookies.txt', cname + "=" + cvalue + ";" + expires + ";path=/");
 }
 
 function getCookie(cname) {
@@ -44,9 +46,7 @@ function getCookie(cname) {
 
 function checkCookie() {
     var user=getCookie("username");
-    if (user != "") {
-        alert("Welcome again " + user);
-    } else {
+    if (user == "") {
        user = prompt("Please enter your name:","");
        if (user != "" && user != null) {
            setCookie("username", user, 30);
