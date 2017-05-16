@@ -60,7 +60,8 @@ def login():
     usrname = request.form['uname']
     password = request.form['psw']
     return login_usr(usrname, password)
-
+ # return redirect(url_for('/login/' + usrname))
+ 
 @app.route('/login/<usrname>/')
 def login_usr(usrname, password):
     test = bool(db_website.user_info.find_one({"username":usrname, "password":password}))

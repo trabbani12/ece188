@@ -1,3 +1,30 @@
+.responsive_block {
+			width: 50%;
+
+		}
+
+	/* explicit small mobile device (e.g., phones in landscape mode) */
+	@media  screen and (max-width: 320px) {
+	  .responsive_block {
+			width: 50%;
+
+	  }
+	}
+	/* medium mobile device (e.g., phones in landscape mode) */
+	@media  screen and (min-width: 320px) and (max-width: 900px) {
+	  .responsive_block {
+			width: 25%;
+
+	  }
+	}
+	/* larger devices */
+	@media  screen and (min-width: 900px) {
+	  .responsive_block {
+			width: 10%;
+
+	  }
+	}
+
 
 .box {
     width: 500px;
@@ -234,7 +261,7 @@ h1 {
 #center_tab {
     position:absolute;
     width: 100%;
-    top: 10%;
+    top: 20%;
     text-align: center;
 }
 table {
