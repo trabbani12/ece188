@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import os
 import sys
 import string
@@ -10,6 +9,10 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from time import sleep
 import RPi.GPIO as GPIO
+import ouimeaux
+from ouimeaux.environment import Environment
+from phue import Bridge
+from pymongo import MongoClient
 
 # Check EPD_SIZE is defined
 EPD_SIZE=0.0
@@ -92,6 +95,7 @@ def main():
             papirus.clear()
             sys.exit()
 
+        # Up Arrow
         if GPIO.input(SW1) == False:
             if FLAG == 4:
                 FLAG = 1
@@ -99,6 +103,7 @@ def main():
                 FLAG += 1
             write_text(papirus, "placeholder", SIZE, FLAG)
 
+        # Down Arrow
         if GPIO.input(SW2) == False:
             if FLAG == 1:
                 FLAG = 4
@@ -106,16 +111,19 @@ def main():
                 FLAG -= 1
             write_text(papirus, "placeholder", SIZE, FLAG)
 
-        #if GPIO.input(SW3) == False:
-            #write_text(papirus, "Three", SIZE)
+        # Function 3
+        if GPIO.input(SW3) == False:
+            function_three(FLAG)
 
-        #if GPIO.input(SW4) == False:
-            #write_text(papirus, "Four", SIZE)
+        # Function 2
+        if GPIO.input(SW4) == False:
+            function_two(FLAG)
 
-        #if (SW5 != -1) and (GPIO.input(SW5) == False):
-            #write_text(papirus, "Five", SIZE)
+        # Function 1
+        if (SW5 != -1) and (GPIO.input(SW5) == False):
+            function_one(FLAG)
  
-        sleep(0.1)
+        sleep(0.05)
 
 def write_text(papirus, text, size, flag):
 
@@ -134,6 +142,114 @@ def write_text(papirus, text, size, flag):
 
     if flag == 4:
         screen.write('./images/fan.bmp')
+
+def function_one(flag):
+    # Initialization
+    env = Environment()
+    env.start()
+    env.discover(3)
+    b = Bridge('192.168.0.100')
+    b.connect()
+    lights = b.lights
+    groups = b.groups
+    client = MongoClient('mongodb://tmega:ucsdece188!@tmega-shard-00-00-kcfpq.mongodb.net:27017,tmega-shard-00-01-kcfpq.mongodb.net:27017,tmega-shard-00-02-kcfpq.mongodb.net:27017/user_info?ssl=true&replicaSet=tmega-shard-0&authSource=admin')
+    db_website = client.website
+
+    # Post button press to API
+    temp_dict = db_website.usrname.find_one({'username':'jwebb'},{'button_one': ()})
+    new_value = int(temp_dict['button_one']) + 1
+    db_website.usrname.update({'username': 'jwebb'}, {'$set': {'button_one': new_value}}, upsert=False)
+    
+    # Bedroom Lights (ON)
+    if flag == 1:
+        b.set_light('lamp 3','on',True)
+        b.set_light('lamp 3',{'bri':int(200), 'transitiontime': 1})
+        b.set_light('lamp 3','ct',197)
+
+    # Kitchen Lights (ON)
+    if flag == 2:
+        b.set_group('Kitchen','on',True)
+        b.set_group('Kitchen',{'bri':int(100), 'transitiontime': 1})
+
+    # TV (NONE)
+    if flag == 3:
+        print ("TV 1")
+
+    # Fan (ON)
+    if flag == 4:
+        env.get_switch('office').on()
+
+    sleep(0.3)
+
+def function_two(flag):
+    # Initialization
+    env = Environment()
+    env.start()
+    env.discover(3)
+    b = Bridge('192.168.0.100')
+    b.connect()
+    lights = b.lights
+    groups = b.groups
+    client = MongoClient('mongodb://tmega:ucsdece188!@tmega-shard-00-00-kcfpq.mongodb.net:27017,tmega-shard-00-01-kcfpq.mongodb.net:27017,tmega-shard-00-02-kcfpq.mongodb.net:27017/user_info?ssl=true&replicaSet=tmega-shard-0&authSource=admin')
+    db_website = client.website
+
+    # Post button press to API
+    temp_dict = db_website.usrname.find_one({'username':'jwebb'},{'button_two': ()})
+    new_value = int(temp_dict['button_two']) + 1
+    db_website.usrname.update({'username': 'jwebb'}, {'$set': {'button_two': new_value}}, upsert=False)
+    
+    # Bedroom Lights (OFF)
+    if flag == 1:
+        b.set_light('lamp 3','on',False)
+
+    # Kitchen Lights (OFF)
+    if flag == 2:
+        b.set_group('Kitchen','on',False)
+
+    # TV (NONE)
+    if flag == 3:
+        print ("TV 2")
+
+    # Fan (OFF)
+    if flag == 4:
+        env.get_switch('office').off()
+
+    sleep(0.3)
+
+def function_three(flag):
+    # Initialization
+    env = Environment()
+    env.start()
+    env.discover(3)
+    b = Bridge('192.168.0.100')
+    b.connect()
+    lights = b.lights
+    groups = b.groups
+    client = MongoClient('mongodb://tmega:ucsdece188!@tmega-shard-00-00-kcfpq.mongodb.net:27017,tmega-shard-00-01-kcfpq.mongodb.net:27017,tmega-shard-00-02-kcfpq.mongodb.net:27017/user_info?ssl=true&replicaSet=tmega-shard-0&authSource=admin')
+    db_website = client.website
+
+    # Post button press to API
+    temp_dict = db_website.usrname.find_one({'username':'jwebb'},{'button_three': ()})
+    new_value = int(temp_dict['button_three']) + 1
+    db_website.usrname.update({'username': 'jwebb'}, {'$set': {'button_three': new_value}}, upsert=False)
+    
+    # Bedroom Lights (RED)
+    if flag == 1:
+        b.set_light('lamp 3','xy',[0.675, 0.322])
+
+    # Kitchen Lights (DIM 1)
+    if flag == 2:
+        b.set_group('Kitchen',{'bri':int(25), 'transitiontime': 1})
+
+    # TV (NONE)
+    if flag == 3:
+        print ("TV 3")
+
+    # Fan (NONE)
+    if flag == 4:
+        print ("FAN 3")
+
+    sleep(0.3)
         
 if __name__ == '__main__':
     main()

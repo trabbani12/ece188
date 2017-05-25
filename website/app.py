@@ -33,7 +33,7 @@ class Item(object):
 
 @app.route('/')
 def index():
-    client.drop_database('tmega')
+    db_website.trabbani.insert_one({"username":"trabbani","shape":"square", "button_one": "-", "button_two": "-", "button_three": "-", "button_four": "1"})
     return render_template('home.html')
 
 @app.route('/sign_up/successful/', methods = ['POST', 'GET'])
@@ -60,7 +60,8 @@ def login():
     usrname = request.form['uname']
     password = request.form['psw']
     return login_usr(usrname, password)
-
+ # return redirect(url_for('/login/' + usrname))
+ 
 @app.route('/login/<usrname>/')
 def login_usr(usrname, password):
     test = bool(db_website.user_info.find_one({"username":usrname, "password":password}))
