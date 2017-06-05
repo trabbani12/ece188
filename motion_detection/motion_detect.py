@@ -11,7 +11,7 @@ from Adafruit_BNO055 import BNO055
 if len(sys.argv) == 2 and sys.argv[1].lower() == '-v':
     logging.basicConfig(level=logging.DEBUG)
  
-bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=18)
+bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=24)
 
 # Initialize the BNO055 and stop if something went wrong.
 if not bno.begin():
@@ -39,7 +39,7 @@ print('Reading BNO055 data, press Ctrl-C to quit...')
 
 # GPIO Setup for button
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #variable for controlling debug print statemnts
 debug=0
@@ -69,7 +69,7 @@ def angle2xy(y_length, heading, pitch):
 #main loop 
 
 while True:
-    input_state = GPIO.input(24)
+    input_state = GPIO.input(18)
     if input_state == False:
 	# print('Button Pressed')	  
 	# Read the Euler angles for heading, roll, pitch (all in degrees).
