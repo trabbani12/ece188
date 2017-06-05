@@ -68,7 +68,7 @@ if (os.path.exists(hatdir + '/product')) and (os.path.exists(hatdir + '/vendor')
        SW5 = -1
 
 # Initialize the BNO055 and stop if something went wrong.
-bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=24)
+bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=12)
 
 if not bno.begin():
     raise RuntimeError('Failed to initialize BNO055! Is the sensor connected?')
@@ -110,6 +110,10 @@ def main():
     global SIZE
     global FLAG
 
+    heading =[]
+    roll =[]
+    pitch=[]
+
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(SW1, GPIO.IN)
@@ -129,7 +133,7 @@ def main():
     papirus.clear()
 
     # Initialize Screen
-    screen.write('./images/light1.bmp')
+    screen.write('../final_project_code/images/light1.bmp')
     while True:
                 # Exit when SW1 and SW2 are pressed simultaneously
         if (GPIO.input(SW1) == False) and (GPIO.input(SW2) == False) :
@@ -314,17 +318,17 @@ def write_text(papirus, text, size, flag):
     print(flag)
 
     if flag == 1:
-        screen.write('./images/light1.bmp')
+        screen.write('../final_project_code/images/light1.bmp')
 
 
     if flag == 2:
-        screen.write('./images/light2.bmp')
+        screen.write('../final_project_code/images/light2.bmp')
 
     if flag == 3:
-        screen.write('./images/tv.bmp')
+        screen.write('../final_project_code/images/tv.bmp')
 
     if flag == 4:
-        screen.write('./images/fan.bmp')
+        screen.write('../final_project_code/images/fan.bmp')
 
 def round_angles(array):
     rounded_angle = []
@@ -343,3 +347,4 @@ def angle2xy(y_length, heading, pitch):
 
 if __name__ == '__main__':
     main()
+
