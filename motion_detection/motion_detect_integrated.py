@@ -6,6 +6,7 @@ import string
 import logging
 import sys
 import time
+import logic
 import RPi.GPIO as GPIO
 from papirus import Papirus
 from papirus import PapirusImage
@@ -98,13 +99,14 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #variable for controlling debug print statemnts
-debug=0
 #debug=1
+debug=0
 
 # Lists for storing readings between button pushes
 heading = []
 roll = []
 pitch = []
+shapes = []
 
 def main():
     global SIZE
@@ -306,6 +308,23 @@ def main():
             print "Shape Matched: "
             print result
 
+	    if result == 'line':
+		if dominant_angle_value < 45 or dominant_angle_value > 345:
+		    result = 'right_swipe'
+		elif dominant_angle_value > 135 and dominant_angle_value < 225:
+	            result = 'left_swipe'
+		elif dominant_angle_value > 45 and dominant_angle_value < 135:
+		    result = 'up_swipe'
+		elif dominant_angle_value > 235 and dominant_angle_value < 345:
+		    result = 'down_swipe'
+
+	    print "Shape Matched: "
+	    print result
+
+	    shapes.append(result)
+	    logic.roku_command(shapes)
+	    shapes.remove(result)
+
             # Reset heading list
             heading = []
             pitch = []
@@ -319,7 +338,6 @@ def write_text(papirus, text, size, flag):
 
     if flag == 1:
         screen.write('../final_project_code/images/light1.bmp')
-
 
     if flag == 2:
         screen.write('../final_project_code/images/light2.bmp')

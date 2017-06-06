@@ -64,6 +64,12 @@ def roku_command(remote_command):
             #move cursor left
             roku.left()
 
+	if i == "up_swipe":
+	    roku.up()
+
+	if i == "down_swipe":
+	    roku.down()
+
         if i == "right_swipe":
             #move curser right
             roku.right()
@@ -77,7 +83,7 @@ def roku_command(remote_command):
 
     return True
 
-#variable = "circle"
+#variable = "right_swipe""
 #list=[]
 #list.append(variable)
 #roku_command(list)
